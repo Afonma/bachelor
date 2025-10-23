@@ -1,5 +1,3 @@
-
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,67 +9,94 @@ datasource db {
 
 model User {
   id String @id @default(uuid())
+
   firstname String
-  lastname String?
   email String @unique
-  phone String?
   password String 
+
+  lastname String?
+  phone String?
+
   role UserRole @default(WORKER)
+
   team Team @relation(fields: [teamId], references: [id])
   teamId String
+
   createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
+
   @@map("users")
 }
 
 model Car {
   id String @id @default(uuid())
+
   name String 
   image String
-  task Task[]
+
   status CarStatus @default(READY)
+
   manufacturer Manufacturer @relation(fields: [manufacturerId], references: [id])
   manufacturerId String @map("manufacturer_id")
+
+  task Task[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
+
   @@map("cars")
 }
 
 
 model Manufacturer {
   id String @id @default(uuid())
-  name String
+
   slug String @unique
+
+  name String
   car Car[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
+
   @@map("manufacturers")
 }
 
 model Task {
   id String @id @default(uuid())
+
   name String
   description String
+
   startDate DateTime @map("start_date")
   endDate DateTime @map("end_date")
+
   car Car @relation(fields: [carId], references: [id] ) 
   carId String @map("car_id")
+
   team Team @relation(fields: [teamId], references: [id])
   teamId String @map("team_id") 
+
   createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
+
   @@map("tasks")
 }
+
 model Team {
   id String @id @default(uuid())
+
   name String
   workersCount Int @default(0) @map("workers_count")
+
   tasks Task[]
   users User[]
+
   createdAt DateTime @default(now()) @map("created_at")
   updateAt DateTime @updatedAt @map("updated_at")
   @@map("teams")
 }
+
 enum UserRole {
   ADMIN
   WORKER
