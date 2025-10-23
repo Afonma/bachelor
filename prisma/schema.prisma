@@ -23,7 +23,7 @@ model User {
   teamId String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("users")
 }
@@ -42,7 +42,7 @@ model Car {
   task Task[]
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("cars")
 }
@@ -57,7 +57,7 @@ model Manufacturer {
   car Car[]
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("manufacturers")
 }
@@ -78,7 +78,7 @@ model Task {
   teamId String @map("team_id") 
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@map("tasks")
 }
@@ -93,7 +93,7 @@ model Team {
   users User[]
 
   createdAt DateTime @default(now()) @map("created_at")
-  updateAt DateTime @updatedAt @map("updated_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   @@map("teams")
 }
 
