@@ -19,8 +19,8 @@ model User {
 
   role UserRole @default(WORKER)
 
-  team Team @relation(fields: [teamId], references: [id])
-  teamId String
+  // team Team @relation(fields: [teamId], references: [id])
+  // teamId String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -90,7 +90,7 @@ model Team {
   workersCount Int @default(0) @map("workers_count")
 
   tasks Task[]
-  users User[]
+  // users User[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
