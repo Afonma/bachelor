@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import type { User } from '@prisma/client'
-import { Authorized, Protected } from 'src/common/decorators'
+import { Authorized, Protected, Roles } from 'src/common/decorators'
 
 import { CreateUserRequest, PatchUserRequest, UserResponse } from './dto'
 import { UsersService } from './users.service'
@@ -11,8 +11,8 @@ export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
 	@Post('/')
-	//    @Protected()
-	//    @Roles('ADMIN')
+	@Protected()
+	@Roles('ADMIN')
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({ summary: 'Create a new user' })
 	@ApiResponse({
@@ -68,7 +68,7 @@ export class UsersController {
 
 	@Delete('/:id')
 	@Protected()
-	// @Roles('ADMIN')
+	@Roles('ADMIN')
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({ summary: 'Delete user by ID' })
 	@ApiResponse({

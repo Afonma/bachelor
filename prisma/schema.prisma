@@ -100,7 +100,7 @@ model Team {
 enum UserRole {
   ADMIN
   WORKER
-
+  HEADWORKER
   @@map("user_roles")
 }
 

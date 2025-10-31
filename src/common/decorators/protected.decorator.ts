@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common'
 
-import { JwtAuthGuard } from '../guards'
+import { JwtAuthGuard, RolesGuard } from '../guards'
 
-export const Protected = () => UseGuards(JwtAuthGuard)
+export const Protected = () => UseGuards(JwtAuthGuard, RolesGuard)
