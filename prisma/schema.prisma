@@ -86,7 +86,7 @@ model Task {
 model Team {
   id String @id @default(uuid())
 
-  name String
+  name String @unique
   workersCount Int @default(0) @map("workers_count")
 
   tasks Task[]
