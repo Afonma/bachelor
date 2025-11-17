@@ -22,10 +22,12 @@ export class UsersService {
 		return this.prismaService.user.create({
 			data: {
 				...dto,
-				password: hashedPassword
+				password: hashedPassword,
+				teamId: dto.teamId
 			}
 		})
 	}
+
 	public async getById(id: string) {
 		return await this.prismaService.user.findUnique({
 			where: {
@@ -38,8 +40,8 @@ export class UsersService {
 				phone: true,
 				role: true,
 				email: true,
-				createdAt: true
-				// team: true,
+				createdAt: true,
+				teamId: true
 			}
 		})
 	}
@@ -62,8 +64,8 @@ export class UsersService {
 				phone: true,
 				role: true,
 				email: true,
-				createdAt: true
-				// team: true,
+				createdAt: true,
+				team: true
 			}
 		})
 	}
