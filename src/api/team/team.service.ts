@@ -16,32 +16,55 @@ export class TeamService {
 	}
 
 	public async getAll() {
-		return this.prismaService.team.findMany()
+		return await this.prismaService.team.findMany({
+			include: {
+				users: {
+					select: {
+						id: true,
+						lastname: true,
+						firstname: true,
+						phone: true,
+						role: true,
+						email: true,
+						createdAt: true
+					}
+				}
+			}
+		})
 	}
 
 	public async getById(id: string) {
-		return this.prismaService.team.findFirst({
-			where: {
-				id
+		return await this.prismaService.team.findUnique({
+			where: { id },
+			include: {
+				users: {
+					select: {
+						id: true,
+						lastname: true,
+						firstname: true,
+						phone: true,
+						role: true,
+						email: true,
+						createdAt: true
+					}
+				}
 			}
 		})
 	}
 
 	public async patchTeam(id: string, dto: CreateTeamRequest) {
-		const { name, workersCount } = dto
+		const { name } = dto
 
 		return await this.prismaService.team.update({
 			where: {
 				id
 			},
 			data: {
-				name,
-				workersCount
+				name
 			},
 			select: {
 				id: true,
-				name: true,
-				workersCount: true
+				name: true
 			}
 		})
 	}
