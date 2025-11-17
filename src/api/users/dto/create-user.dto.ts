@@ -43,11 +43,11 @@ export class CreateUserRequest {
 	@IsString({ message: 'Phone number must be a string' })
 	public phone?: string
 
-	// @ApiProperty({
-	//     example: 'team-uuid-1234',
-	//     description: 'ID of the team the user belongs to'
-	// })
-	// @IsOptional()
-	// @IsString({ message: 'Team ID must be a string' })
-	// public teamId?: string
+	@ApiProperty({
+		example: 'team-uuid-1234',
+		description: 'ID of the team the user belongs to'
+	})
+	@IsOptional()
+	@IsString({ message: 'Team ID must be a string' })
+	public teamId?: string
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator'
+import { IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateTeamRequest {
 	@ApiProperty({
@@ -10,12 +10,4 @@ export class CreateTeamRequest {
 	@IsString({ message: 'Teams name must be string' })
 	@IsNotEmpty({ message: 'Teams name is required' })
 	name: string
-
-	@ApiProperty({
-		example: 3,
-		description: 'Workers count',
-		required: true
-	})
-	@IsNumber()
-	workersCount: number
 }
