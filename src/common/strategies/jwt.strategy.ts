@@ -8,7 +8,7 @@ import { PrismaService } from 'src/infra/prisma/prisma.service'
 import { RedisService } from 'src/infra/redis/redis.service'
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy, 'Jwt') {
+export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 	public constructor(
 		private readonly configService: ConfigService,
 		private readonly redisService: RedisService,
