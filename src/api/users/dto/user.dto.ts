@@ -46,4 +46,10 @@ export class UserResponse {
 		description: 'Date when the user was created'
 	})
 	public createdAt: Date
+
+	@ApiProperty({
+		example: '2025-10-28T17:30:00.000Z',
+		description: 'Date when the user was updated'
+	})
+	public updatedAt: Date
 }
