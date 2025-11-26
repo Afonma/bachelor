@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
-import { CreateTeamRequest } from './dto/create-team.dto'
+import { CreateTeamRequest, PatchTeamRequest } from './dto'
 
 @Injectable()
 export class TeamService {
@@ -52,7 +52,7 @@ export class TeamService {
 		})
 	}
 
-	public async patchTeam(id: string, dto: CreateTeamRequest) {
+	public async patchTeam(id: string, dto: PatchTeamRequest) {
 		const { name } = dto
 
 		return await this.prismaService.team.update({
@@ -69,7 +69,7 @@ export class TeamService {
 		})
 	}
 
-	public async removeTeam(id: string) {
+	public async remove(id: string) {
 		await this.prismaService.team.delete({
 			where: {
 				id

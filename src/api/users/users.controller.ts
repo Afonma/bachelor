@@ -80,6 +80,6 @@ export class UsersController {
 		description: 'User not found'
 	})
 	public async remove(@Param('id') id: string) {
-		return this.usersService.removeUser(id)
+		return this.usersService.remove(id)
 	}
 }

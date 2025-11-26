@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("POSTGRES_URI")
+  url = env("POSTGRES_URI")
 }
 
 model User {
@@ -28,7 +28,7 @@ model User {
   @@map("users")
 }
 
-model Car {
+model Transport {
   id String @id @default(uuid())
 
   name String 
@@ -39,12 +39,12 @@ model Car {
   manufacturer Manufacturer @relation(fields: [manufacturerId], references: [id])
   manufacturerId String @map("manufacturer_id")
 
-  task Task[]
+  tasks Task[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  @@map("cars")
+  @@map("transport")
 }
 
 
@@ -54,7 +54,7 @@ model Manufacturer {
   slug String @unique
 
   name String
-  car Car[]
+  transport Transport[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -71,8 +71,8 @@ model Task {
   startDate DateTime @map("start_date")
   endDate DateTime @map("end_date")
 
-  car Car @relation(fields: [carId], references: [id] ) 
-  carId String @map("car_id")
+  transport Transport @relation(fields: [transportId], references: [id] ) 
+  transportId String @map("transport_id")
 
   team Team @relation(fields: [teamId], references: [id])
   teamId String @map("team_id") 
