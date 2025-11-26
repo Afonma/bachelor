@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { CarStatus } from '@prisma/client'
+import { TransportStatus } from '@prisma/client'
 
 export class TransportResponse {
 	@ApiProperty({
@@ -23,9 +23,9 @@ export class TransportResponse {
 	@ApiProperty({
 		example: 'READY',
 		description: 'Transport status default(READY)',
-		enum: CarStatus
+		enum: TransportStatus
 	})
-	public status: CarStatus
+	public status: TransportStatus
 
 	@ApiProperty({
 		example: 'c1b92d83-26c4-4b71-8c25-4a9a2f6f0c6f',

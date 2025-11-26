@@ -34,7 +34,7 @@ model Transport {
   name String 
   image String
 
-  status CarStatus @default(READY)
+  status TransportStatus @default(READY)
 
   manufacturer Manufacturer @relation(fields: [manufacturerId], references: [id])
   manufacturerId String @map("manufacturer_id")
@@ -103,7 +103,7 @@ enum UserRole {
   @@map("user_roles")
 }
 
-enum CarStatus {
+enum TransportStatus {
   COMPLETE
   ONGOING
   READY

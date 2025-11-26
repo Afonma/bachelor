@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { CarStatus } from '@prisma/client'
+import { TransportStatus } from '@prisma/client'
 import { IsEnum, IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateTransportRequest {
@@ -32,7 +32,7 @@ export class CreateTransportRequest {
 	@ApiProperty({
 		example: {},
 		description: 'Car status default(READY)',
-		enum: CarStatus
+		enum: TransportStatus
 	})
 	@IsEnum(
 		{},
@@ -40,7 +40,7 @@ export class CreateTransportRequest {
 			message: 'Status must be enum'
 		}
 	)
-	status: CarStatus
+	status: TransportStatus
 
 	@ApiProperty({
 		example: 'c1b92d83-26c4-4b71-8c25-4a9a2f6f0c6f',

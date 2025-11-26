@@ -46,8 +46,7 @@ export class TransportService {
 					select: {
 						id: true,
 						slug: true,
-						name: true,
-						createdAt: true
+						name: true
 					}
 				}
 			}

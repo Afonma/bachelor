@@ -9,7 +9,7 @@ export class TransportController {
 	constructor(private readonly transportService: TransportService) {}
 
 	@Post('/')
-	@HttpCode(HttpStatus.CREATED)
+	@HttpCode(HttpStatus.CREATED) //succesful request 201
 	@ApiOperation({
 		summary: 'Create a transport'
 	})
@@ -89,7 +89,7 @@ export class TransportController {
 	}
 
 	@Delete('/:id')
-	@HttpCode(HttpStatus.OK)
+	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		summary: 'Delete transport by id'
 	})
