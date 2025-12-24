@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
+import { QueryPaginationRequest } from '@/common/dtos'
+import { pagination } from '@/common/utils'
+
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
 import { PatchManufacturerRequest } from './dto/patch-manufacturer.dto'
 
@@ -16,8 +19,38 @@ export class ManufacturerService {
 		})
 	}
 
-	public async getAll() {
-		return await this.prismaService.manufacturer.findMany()
+	public async getAll(query: QueryPaginationRequest) {
+		const { prismaQuery, page, limit } = pagination(query, {
+			searchFields: ['name']
+		})
+
+		const [items, total] = await Promise.all([
+			this.prismaService.manufacturer.findMany({
+				...prismaQuery,
+				select: {
+					id: true,
+					name: true,
+					createdAt: true
+				}
+			}),
+			this.prismaService.manufacturer.count({
+				where: prismaQuery.where
+			})
+		])
+
+		const totalPages = Math.ceil(total / limit)
+
+		return {
+			items,
+			meta: {
+				total,
+				page: Number(query.page) || 1,
+				limit: Number(query.limit) || 20,
+				totalPages,
+				nextPage: page < totalPages ? page + 1 : null,
+				prevPage: page > 1 ? page - 1 : null
+			}
+		}
 	}
 
 	public async getById(id: string) {

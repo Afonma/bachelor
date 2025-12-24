@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+
+import { QueryPaginationRequest } from '@/common/dtos'
 
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
 import { ManufacturerResponse } from './dto/manufacturer.dto'
@@ -42,8 +44,8 @@ export class ManufacturerController {
 		status: HttpStatus.BAD_REQUEST,
 		description: 'Invalid manufacturer data'
 	})
-	public async getAll() {
-		return this.manufacturerService.getAll()
+	public async getAll(@Query() query: QueryPaginationRequest) {
+		return this.manufacturerService.getAll(query)
 	}
 
 	@Get('/:id')

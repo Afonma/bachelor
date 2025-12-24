@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { TransportResponse } from 'src/api/transport/dto'
 
+import { QueryPaginationResponse } from '@/common/dtos'
+
 export class ManufacturerResponse {
 	@ApiProperty({
 		example: 'c1b92d83-26c4-4b71-8c25-4a9a2f6f0c6f',
@@ -37,4 +39,16 @@ export class ManufacturerResponse {
 		description: 'Manufacturer update date'
 	})
 	public updatedAt: Date
+}
+
+export class ManufacturersResponse {
+	@ApiProperty({
+		type: [ManufacturerResponse]
+	})
+	items: ManufacturerResponse[]
+
+	@ApiProperty({
+		type: QueryPaginationResponse
+	})
+	meta: QueryPaginationResponse
 }
