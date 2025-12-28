@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { UserRole } from '@prisma/client'
 
 export class TaskResponse {
 	@ApiProperty({
@@ -36,6 +37,13 @@ export class TaskResponse {
 		description: 'Task end date'
 	})
 	public endDate: Date
+
+	@ApiProperty({
+		example: 'WORKER',
+		description: 'User role (default: WORKER)',
+		enum: UserRole
+	})
+	public role: UserRole
 
 	@ApiProperty({
 		example: '2025-03-16T00:00:00.000Z',

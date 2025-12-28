@@ -12,7 +12,7 @@ export class UsersController {
 
 	@Post('/')
 	@Protected()
-	@Roles('ADMIN')
+	@Roles('HEADWORKER')
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({ summary: 'Create a new user' })
 	@ApiResponse({

@@ -24,6 +24,16 @@ export class UsersService {
 				...dto,
 				password: hashedPassword,
 				teamId: dto.teamId
+			},
+			select: {
+				id: true,
+				lastname: true,
+				firstname: true,
+				phone: true,
+				role: true,
+				email: true,
+				createdAt: true,
+				teamId: true
 			}
 		})
 	}

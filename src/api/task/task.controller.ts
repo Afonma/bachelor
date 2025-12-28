@@ -1,10 +1,12 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+
+import { QueryPaginationRequest } from '@/common/dtos'
 
 import { CreateTaskRequest, PatchTaskRequest, TaskResponse } from './dto'
 import { TaskService } from './task.service'
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
 	constructor(private readonly taskService: TaskService) {}
 
@@ -40,8 +42,8 @@ export class TaskController {
 		status: HttpStatus.BAD_REQUEST,
 		description: 'Invalid data'
 	})
-	public async getAll() {
-		return this.taskService.getAll
+	public async getAll(@Query() query: QueryPaginationRequest) {
+		return this.taskService.getAll(query)
 	}
 
 	@Get('/:id')

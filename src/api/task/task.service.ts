@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
+import { QueryPaginationRequest } from '@/common/dtos'
+import { pagination } from '@/common/utils'
+
 import { CreateTaskRequest, PatchTaskRequest } from './dto'
 
 @Injectable()
@@ -15,8 +18,11 @@ export class TaskService {
 		})
 	}
 
-	public async getAll() {
+	public async getAll(query: QueryPaginationRequest) {
+		const { prismaQuery } = pagination(query)
+
 		return await this.prismaService.task.findMany({
+			...prismaQuery,
 			include: {
 				team: {
 					select: {
@@ -124,3 +130,5 @@ export class TaskService {
 		})
 	}
 }
+
+// ПРОВЕРИТЬ ЧТОБЫ ОНО ПРАВИЛЬНО ОТОБРАЖАЛОСЬ В КОМАНДАХ

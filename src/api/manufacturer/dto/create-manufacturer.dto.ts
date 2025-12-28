@@ -3,18 +3,6 @@ import { IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateManufacturerRequest {
 	@ApiProperty({
-		example: 'audi-a3',
-		description: 'Slug'
-	})
-	@IsNotEmpty({
-		message: 'Slug is required'
-	})
-	@IsString({
-		message: 'Slug must be string'
-	})
-	public slug: string
-
-	@ApiProperty({
 		example: 'Audi',
 		description: 'Manufacturer name'
 	})

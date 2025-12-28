@@ -1,4 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
+import { UserRole } from '@prisma/client'
+import { Type } from 'class-transformer'
 import { IsDate, IsNotEmpty, IsString } from 'class-validator'
 
 export class CreateTaskRequest {
@@ -43,6 +45,7 @@ export class CreateTaskRequest {
 		required: true,
 		description: 'Task start date'
 	})
+	@Type(() => Date)
 	@IsNotEmpty({ message: 'Start date is required' })
 	@IsDate({ message: 'Start date must have date format' })
 	startDate: Date
@@ -52,7 +55,17 @@ export class CreateTaskRequest {
 		required: true,
 		description: 'Task end date'
 	})
+	@Type(() => Date)
 	@IsNotEmpty({ message: 'End date is required' })
 	@IsDate({ message: 'End date must have date format' })
 	endDate: Date
+
+	@ApiProperty({
+		example: 'WORKER',
+		description: 'User role (default: WORKER)',
+		enum: UserRole
+	})
+	@IsString({ message: 'Role must be string' })
+	@IsNotEmpty({ message: 'Role is required' })
+	public role: UserRole
 }

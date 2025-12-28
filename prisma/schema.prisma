@@ -20,7 +20,7 @@ model User {
   role UserRole @default(WORKER)
 
   team Team? @relation(fields: [teamId], references: [id])
-  teamId String?
+  teamId String? @map("team_id")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -75,7 +75,9 @@ model Task {
   transportId String @map("transport_id")
 
   team Team @relation(fields: [teamId], references: [id])
-  teamId String @map("team_id") 
+  teamId String @map("team_id")
+
+  role UserRole @default(WORKER)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

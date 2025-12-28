@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
 import { QueryPaginationRequest } from '@/common/dtos'
-import { pagination } from '@/common/utils'
+import { pagination, slugify } from '@/common/utils'
 
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
 import { PatchManufacturerRequest } from './dto/patch-manufacturer.dto'
@@ -14,7 +14,8 @@ export class ManufacturerService {
 	public async createManufacturer(dto: CreateManufacturerRequest) {
 		return await this.prismaService.manufacturer.create({
 			data: {
-				...dto
+				name: dto.name,
+				slug: slugify(dto.name)
 			}
 		})
 	}

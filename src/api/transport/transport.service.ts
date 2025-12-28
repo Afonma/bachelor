@@ -15,7 +15,14 @@ export class TransportService {
 	public async create(dto: CreateTransportRequest) {
 		return await this.prismaService.transport.create({
 			data: {
-				...dto
+				name: dto.name,
+				image: dto.image,
+				status: dto.status,
+				manufacturer: {
+					connect: {
+						id: dto.manufacturerId
+					}
+				}
 			}
 		})
 	}
