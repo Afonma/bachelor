@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
-import { QueryPaginationRequest } from '@/common/dtos'
-import { pagination, slugify } from '@/common/utils'
+import { QueryPaginationRequest } from '@/shared/dtos'
+import { pagination, slugify } from '@/shared/utils'
 
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
 import { PatchManufacturerRequest } from './dto/patch-manufacturer.dto'

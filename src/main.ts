@@ -3,8 +3,9 @@ import { ConfigService } from '@nestjs/config'
 import { NestFactory } from '@nestjs/core'
 import type { NestExpressApplication } from '@nestjs/platform-express'
 
+import { setupSwagger } from '@/shared/utils'
+
 import { AppModule } from './app.module'
-import { setupSwagger } from './common/utils'
 import { getCorsConfig, getValidationPipeConfig } from './config'
 
 async function bootstrap() {

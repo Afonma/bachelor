@@ -3,9 +3,10 @@ import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { type User } from '@prisma/client'
 import { verify } from 'argon2'
-import { StringValue } from 'src/common/utils'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 import { RedisService } from 'src/infra/redis/redis.service'
+
+import { StringValue } from '@/shared/utils'
 
 import { LoginRequest } from './dto'
 import { JwtPayload } from './interfaces'

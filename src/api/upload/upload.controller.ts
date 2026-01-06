@@ -2,8 +2,8 @@ import { Controller, HttpCode, HttpStatus, Param, Post, UploadedFiles, UseInterc
 import { FilesInterceptor } from '@nestjs/platform-express'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
-import { ApiFileUpload } from '@/common/decorators'
 import { CloudinaryService } from '@/libs/cloudinary/cloudinary.service'
+import { ApiFileUpload } from '@/shared/decorators'
 
 import { UploadService } from './upload.service'
 

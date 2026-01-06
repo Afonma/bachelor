@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { TransportResponse } from 'src/api/transport/dto'
 
-import { QueryPaginationResponse } from '@/common/dtos'
+import { QueryPaginationResponse } from '@/shared/dtos'
 
 export class ManufacturerResponse {
 	@ApiProperty({

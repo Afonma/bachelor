@@ -4,26 +4,30 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("POSTGRES_URI")
+  url      = env("POSTGRES_URI")
 }
 
 model User {
   id String @id @default(uuid())
 
   firstname String
-  email String @unique
-  password String 
+  email     String @unique
+  password  String
 
   lastname String?
-  phone String?
+  phone    String?
 
   role UserRole @default(WORKER)
 
-  team Team? @relation(fields: [teamId], references: [id])
+  team   Team?   @relation(fields: [teamId], references: [id])
   teamId String? @map("team_id")
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  clientChats Chat[] @relation("ClientChats")
+  workerChats Chat[] @relation("WorkerChats")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  Message   Message[]
 
   @@map("users")
 }
@@ -31,13 +35,13 @@ model User {
 model Transport {
   id String @id @default(uuid())
 
-  name String 
+  name  String
   image String
 
   status TransportStatus @default(READY)
 
-  manufacturer Manufacturer @relation(fields: [manufacturerId], references: [id])
-  manufacturerId String @map("manufacturer_id")
+  manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])
+  manufacturerId String       @map("manufacturer_id")
 
   tasks Task[]
 
@@ -47,13 +51,12 @@ model Transport {
   @@map("transport")
 }
 
-
 model Manufacturer {
   id String @id @default(uuid())
 
   slug String @unique
 
-  name String
+  name      String
   transport Transport[]
 
   createdAt DateTime @default(now()) @map("created_at")
@@ -65,16 +68,16 @@ model Manufacturer {
 model Task {
   id String @id @default(uuid())
 
-  name String
+  name        String
   description String
 
   startDate DateTime @map("start_date")
-  endDate DateTime @map("end_date")
+  endDate   DateTime @map("end_date")
 
-  transport Transport @relation(fields: [transportId], references: [id] ) 
-  transportId String @map("transport_id")
+  transport   Transport @relation(fields: [transportId], references: [id])
+  transportId String    @map("transport_id")
 
-  team Team @relation(fields: [teamId], references: [id])
+  team   Team   @relation(fields: [teamId], references: [id])
   teamId String @map("team_id")
 
   role UserRole @default(WORKER)
@@ -95,13 +98,50 @@ model Team {
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
+
   @@map("teams")
+}
+
+model Chat {
+  id String @id @default(uuid())
+
+  client   User   @relation("ClientChats", fields: [clientId], references: [id])
+  clientId String @map("client_id")
+
+  worker   User   @relation("WorkerChats", fields: [workerId], references: [id])
+  workerId String @map("worker_id")
+
+  messages Message[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("chats")
+}
+
+model Message {
+  id String @id @default(uuid())
+
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId String @map("chat_id")
+
+  sender   User   @relation(fields: [senderId], references: [id])
+  senderId String @map("sender_id")
+
+  content String
+  isNote  Boolean @default(false) @map("is_note")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("messages")
 }
 
 enum UserRole {
   ADMIN
   WORKER
   HEADWORKER
+
   @@map("user_roles")
 }
 

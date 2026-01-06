@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
-import { QueryPaginationRequest } from '@/common/dtos'
+import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
 import { ManufacturerResponse } from './dto/manufacturer.dto'

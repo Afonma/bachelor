@@ -1,7 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 import type { User } from '@prisma/client'
-import { Authorized, Protected, Roles } from 'src/common/decorators'
+
+import { Authorized, Protected, Roles } from '@/shared/decorators'
 
 import { CreateUserRequest, PatchUserRequest, UserResponse } from './dto'
 import { UsersService } from './users.service'

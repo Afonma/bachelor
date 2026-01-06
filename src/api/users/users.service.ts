@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { hash } from 'argon2'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
@@ -17,7 +17,7 @@ export class UsersService {
 			}
 		})
 
-		if (user) throw new BadRequestException('User with this email is already existed')
+		if (user) throw new NotFoundException('User with this email is already existed')
 
 		return this.prismaService.user.create({
 			data: {
@@ -39,7 +39,7 @@ export class UsersService {
 	}
 
 	public async getById(id: string) {
-		return await this.prismaService.user.findUnique({
+		const user = await this.prismaService.user.findUnique({
 			where: {
 				id
 			},
@@ -54,6 +54,10 @@ export class UsersService {
 				teamId: true
 			}
 		})
+
+		if (user) throw new NotFoundException('User with this email is already existed')
+
+		return user
 	}
 	public async patchUser(id: string, dto: PatchUserRequest) {
 		const { firstname, lastname, phone } = dto

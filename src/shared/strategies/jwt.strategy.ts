@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 		} as StrategyOptionsWithRequest)
 	}
 	public async validate(req: Request, payload: JwtPayload) {
-		const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req)!
+		const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req)
 		const isTokenInBlacklist = await this.redisService.get(token)
 
 		if (isTokenInBlacklist) {

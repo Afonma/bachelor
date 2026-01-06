@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
-import { QueryPaginationRequest } from '@/common/dtos'
-import { pagination } from '@/common/utils'
+import { QueryPaginationRequest } from '@/shared/dtos'
+import { pagination } from '@/shared/utils'
 
 import { CreateTaskRequest, PatchTaskRequest } from './dto'
 
