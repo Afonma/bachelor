@@ -38,6 +38,33 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 		return await this.redis.del(key)
 	}
 
+	public async sadd(key: string, value: string) {
+		return this.redis.sadd(key, value)
+	}
+
+	async srem(key: string, value: string) {
+		return this.redis.srem(key, value)
+	}
+
+	async scard(key: string) {
+		return this.redis.scard(key)
+	}
+
+	async smembers(key: string) {
+		return this.redis.smembers(key)
+	}
+
+	async delIfEmpty(key: string) {
+		const size = await this.redis.scard(key)
+
+		if (size === 0) {
+			await this.redis.del(key)
+			return true
+		}
+
+		return false
+	}
+
 	public async setTokenToBlackList(token: string, exp: number) {
 		return await this.redis.set(token, 'true', 'EX', exp)
 	}

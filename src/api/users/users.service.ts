@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
+import { ChatType } from '@prisma/client'
 import { hash } from 'argon2'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
@@ -11,15 +12,15 @@ export class UsersService {
 	public async create(dto: CreateUserRequest) {
 		const hashedPassword = await hash(dto.password)
 
-		const user = await this.prismaService.user.findUnique({
+		const existing = await this.prismaService.user.findUnique({
 			where: {
 				email: dto.email
 			}
 		})
 
-		if (user) throw new NotFoundException('User with this email is already existed')
+		if (existing) throw new NotFoundException('User with this email is already existed')
 
-		return this.prismaService.user.create({
+		const user = await this.prismaService.user.create({
 			data: {
 				...dto,
 				password: hashedPassword,
@@ -36,6 +37,29 @@ export class UsersService {
 				teamId: true
 			}
 		})
+
+		const general = await this.prismaService.chat.findFirst({
+			where: { type: ChatType.GENERAL }
+		})
+
+		if (general) {
+			await this.prismaService.chatMember.create({
+				data: {
+					chatId: general.id,
+					userId: user.id
+				}
+			})
+		}
+
+		await this.prismaService.chat.create({
+			data: {
+				name: 'Saved Messages',
+				type: ChatType.NOTE,
+				ownerId: user.id
+			}
+		})
+
+		return user
 	}
 
 	public async getById(id: string) {
@@ -55,7 +79,7 @@ export class UsersService {
 			}
 		})
 
-		if (user) throw new NotFoundException('User with this email is already existed')
+		if (user) throw new NotFoundException('User not found')
 
 		return user
 	}

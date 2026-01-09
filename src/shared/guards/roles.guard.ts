@@ -12,12 +12,14 @@ export class RolesGuard implements CanActivate {
 	public async canActivate(context: ExecutionContext): Promise<boolean> {
 		const roles = this.reflector.getAllAndOverride<string[]>('roles', [context.getHandler(), context.getClass()])
 		if (!roles) return true
+
 		const request = context.switchToHttp().getRequest()
 		const user = await this.prismaService.user.findUnique({
 			where: {
 				id: request.user.id
 			}
 		})
+
 		if (!user || !roles.includes(user.role)) throw new ForbiddenException("You don't have a permission to access this resource")
 		return true
 	}
