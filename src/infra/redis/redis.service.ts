@@ -22,7 +22,7 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 
 	public onModuleDestroy() {
 		this.logger.warn('⚙️ Disconnecting from Redis...')
-		this.redis.disconnect()
+		this.redis.quit()
 		this.logger.log('🔌 Redis disconnected successfully')
 	}
 
@@ -42,19 +42,19 @@ export class RedisService implements OnModuleInit, OnModuleDestroy {
 		return this.redis.sadd(key, value)
 	}
 
-	async srem(key: string, value: string) {
+	public async srem(key: string, value: string) {
 		return this.redis.srem(key, value)
 	}
 
-	async scard(key: string) {
+	public async scard(key: string) {
 		return this.redis.scard(key)
 	}
 
-	async smembers(key: string) {
+	public async smembers(key: string) {
 		return this.redis.smembers(key)
 	}
 
-	async delIfEmpty(key: string) {
+	public async delIfEmpty(key: string) {
 		const size = await this.redis.scard(key)
 
 		if (size === 0) {
