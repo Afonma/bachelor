@@ -121,7 +121,6 @@ model Chat {
   @@map("chats")
 }
 
-
 model ChatMember {
   id String @id @default(uuid())
 
