@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
 import { CreateTeamRequest, PatchTeamRequest } from './dto'
@@ -34,7 +34,7 @@ export class TeamService {
 	}
 
 	public async getById(id: string) {
-		return await this.prismaService.team.findUnique({
+		const team = await this.prismaService.team.findUnique({
 			where: { id },
 			include: {
 				users: {
@@ -50,6 +50,10 @@ export class TeamService {
 				}
 			}
 		})
+
+		if (!team) throw new NotFoundException('Team not found')
+
+		return team
 	}
 
 	public async patchTeam(id: string, dto: PatchTeamRequest) {

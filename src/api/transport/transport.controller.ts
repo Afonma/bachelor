@@ -1,5 +1,7 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+
+import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { CreateTransportRequest, PatchTransportRequest, TransportResponse } from './dto'
 import { TransportService } from './transport.service'
@@ -40,8 +42,8 @@ export class TransportController {
 		status: HttpStatus.BAD_REQUEST,
 		description: 'Invalid data'
 	})
-	public async getAll() {
-		return this.transportService.getAll()
+	public async getAll(@Query() query: QueryPaginationRequest) {
+		return this.transportService.getAll(query)
 	}
 
 	@Get('/:id')

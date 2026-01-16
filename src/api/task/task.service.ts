@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
 import { QueryPaginationRequest } from '@/shared/dtos'
@@ -19,51 +19,79 @@ export class TaskService {
 	}
 
 	public async getAll(query: QueryPaginationRequest) {
-		const { prismaQuery } = pagination(query)
+		const { prismaQuery, page, limit } = pagination(query, {
+			searchFields: ['name']
+		})
 
-		return await this.prismaService.task.findMany({
-			...prismaQuery,
-			include: {
-				team: {
-					select: {
-						id: true,
-						name: true,
-						users: {
-							select: {
-								lastname: true,
-								firstname: true,
-								phone: true,
-								role: true,
-								email: true,
-								createdAt: true
-							}
-						},
-						createdAt: true
-					}
+		const [items, total] = await Promise.all([
+			this.prismaService.task.findMany({
+				...prismaQuery,
+				select: {
+					id: true,
+					name: true,
+					description: true,
+					startDate: true,
+					endDate: true
 				},
-				transport: {
-					select: {
-						id: true,
-						name: true,
-						image: true,
-						status: true,
-						manufacturer: {
-							select: {
-								id: true,
-								slug: true,
-								name: true,
-								createdAt: true
-							}
-						},
-						createdAt: true
+				include: {
+					team: {
+						select: {
+							id: true,
+							name: true,
+							users: {
+								select: {
+									lastname: true,
+									firstname: true,
+									phone: true,
+									role: true,
+									email: true,
+									createdAt: true
+								}
+							},
+							createdAt: true
+						}
+					},
+					transport: {
+						select: {
+							id: true,
+							name: true,
+							image: true,
+							status: true,
+							manufacturer: {
+								select: {
+									id: true,
+									slug: true,
+									name: true,
+									createdAt: true
+								}
+							},
+							createdAt: true
+						}
 					}
 				}
+			}),
+			this.prismaService.task.count({
+				where: prismaQuery.where
+			})
+		])
+
+		const totalPages = Math.ceil(total / limit)
+
+		return {
+			items,
+			meta: {
+				total,
+				page: Number(query.page) || 1,
+				limit: Number(query.limit) || 20,
+				totalPages,
+				nextPage: page < totalPages ? page + 1 : null,
+				prevPage: page > 1 ? page - 1 : null
 			}
-		})
+		}
 	}
 
 	public async getById(id: string) {
-		return await this.prismaService.task.findUnique({
+		const task = await this.prismaService.task.findUnique({
 			where: {
 				id
 			},
@@ -103,6 +131,10 @@ export class TaskService {
 				}
 			}
 		})
+
+		if (!task) throw new NotFoundException('Task not found')
+
+		return task
 	}
 
 	public async patchTask(id: string, dto: PatchTaskRequest) {

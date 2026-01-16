@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common'
+import { BadRequestException, Injectable } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
 import { QueryPaginationRequest } from '@/shared/dtos'
@@ -55,7 +55,7 @@ export class ManufacturerService {
 	}
 
 	public async getById(id: string) {
-		return await this.prismaService.manufacturer.findUnique({
+		const manufacturer = await this.prismaService.manufacturer.findUnique({
 			where: {
 				id
 			},
@@ -72,6 +72,10 @@ export class ManufacturerService {
 				}
 			}
 		})
+
+		if (!manufacturer) throw new BadRequestException('Manufacturer not found')
+
+		return manufacturer
 	}
 
 	public async patchManufacturer(id: string, dto: PatchManufacturerRequest) {
