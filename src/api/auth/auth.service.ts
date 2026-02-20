@@ -30,7 +30,9 @@ export class AuthService {
 		const admin = await this.prismaService.user.findFirst({
 			where: {
 				email,
-				role: UserRole.ADMIN
+				role: {
+					in: [UserRole.ADMIN, UserRole.HEADWORKER, UserRole.WORKER]
+				}
 			}
 		})
 

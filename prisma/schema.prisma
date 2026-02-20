@@ -109,8 +109,8 @@ model Chat {
 
   type ChatType
 
-  owner   User?   @relation("OwnerChats", fields: [ownerId], references: [id])
-  ownerId String? @map("owner_id")
+  // owner   User?   @relation("OwnerChats", fields: [ownerId], references: [id])
+  // ownerId String? @map("owner_id")
 
   messages Message[]
   members ChatMember[]
