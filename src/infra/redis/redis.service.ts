@@ -1,8 +1,29 @@
 import { Inject, Injectable, Logger, type OnModuleDestroy, type OnModuleInit } from '@nestjs/common'
+import { $Enums } from '@prisma/client'
 import Redis from 'ioredis'
 
 @Injectable()
 export class RedisService implements OnModuleInit, OnModuleDestroy {
+	createMfaTicket(id: string, allowedMethods: string[]) {
+		throw new Error('Method not implemented.')
+	}
+	createSession(
+		admin: {
+			id: string
+			firstname: string
+			email: string
+			password: string
+			lastname: string | null
+			phone: string | null
+			role: $Enums.UserRole
+			teamId: string | null
+			createdAt: Date
+			updatedAt: Date
+		},
+		arg1: { ip: string; userAgent: string }
+	) {
+		throw new Error('Method not implemented.')
+	}
 	private readonly logger = new Logger(RedisService.name)
 	public constructor(
 		@Inject('REDIS_CLIENT')

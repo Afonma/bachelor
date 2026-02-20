@@ -1,10 +1,9 @@
 import { ConfigService } from '@nestjs/config'
-
-import { AllConfigs } from '../definitions'
-import { RedisClient } from '../redis.config'
 import Redis from 'ioredis'
 
-export function getRedisConfig(configService: ConfigService<AllConfigs>): Promise<RedisClient> {
+import { AllConfigs } from '../definitions'
+
+export function getRedisConfig(configService: ConfigService<AllConfigs>): Promise<Redis> {
 	return Promise.resolve(
 		new Redis({
 			host: configService.get('redis.host', { infer: true }),

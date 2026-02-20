@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
-import { type User } from '@prisma/client'
+import { type User, UserRole } from '@prisma/client'
 import { verify } from 'argon2'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 import { RedisService } from 'src/infra/redis/redis.service'
@@ -27,6 +27,14 @@ export class AuthService {
 
 	public async login(dto: LoginRequest) {
 		const { email, password } = dto
+		const admin = await this.prismaService.user.findFirst({
+			where: {
+				email,
+				role: UserRole.ADMIN
+			}
+		})
+
+		if (!admin) throw new NotFoundException('Login is invalid')
 
 		const user = await this.prismaService.user.findFirst({
 			where: {
@@ -39,6 +47,7 @@ export class AuthService {
 		if (!isValidPassword) throw new NotFoundException('Login is invalid')
 
 		const token = await this.generateToken(user)
+
 		return {
 			accessToken: token.accessToken,
 			refreshToken: token.refreshToken

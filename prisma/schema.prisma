@@ -80,7 +80,7 @@ model Task {
   team   Team   @relation(fields: [teamId], references: [id])
   teamId String @map("team_id")
 
-  role UserRole @default(WORKER)
+  role UserRole @default(HEADWORKER)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
