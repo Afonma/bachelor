@@ -93,7 +93,8 @@ export class UsersService {
 			data: {
 				firstname,
 				lastname,
-				phone
+				phone,
+				team: dto.teamId ? { connect: { id: dto.teamId } } : undefined
 			},
 			select: {
 				id: true,

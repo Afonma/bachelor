@@ -1,5 +1,6 @@
 import type { INestApplication } from '@nestjs/common'
 import { SwaggerModule } from '@nestjs/swagger'
+
 import { getSwaggerConfig } from '@/config'
 
 export function setupSwagger(app: INestApplication) {

@@ -1,7 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger'
-import { UserRole } from '@prisma/client'
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger'
 import { Type } from 'class-transformer'
-import { IsDate, IsNotEmpty, IsString } from 'class-validator'
+import { IsDate, IsNotEmpty, IsOptional, IsString } from 'class-validator'
 
 export class CreateTaskRequest {
 	@ApiProperty({
@@ -59,13 +58,38 @@ export class CreateTaskRequest {
 	@IsNotEmpty({ message: 'End date is required' })
 	@IsDate({ message: 'End date must have date format' })
 	endDate: Date
+}
+
+export class CreateSubTaskRequest {
+	@ApiProperty({
+		description: 'The name of the subtask',
+		example: 'Check engine'
+	})
+	@IsString()
+	@IsNotEmpty()
+	name: string
+
+	@ApiPropertyOptional({
+		description: 'The description of the subtask',
+		example: 'Inspect the engine condition and oil level'
+	})
+	@IsString()
+	@IsOptional()
+	description?: string
 
 	@ApiProperty({
-		example: 'WORKER',
-		description: 'User role (default: WORKER)',
-		enum: UserRole
+		description: 'The ID of the task this subtask belongs to',
+		example: '123e4567-e89b-12d3-a456-426614174000'
 	})
-	@IsString({ message: 'Role must be string' })
-	@IsNotEmpty({ message: 'Role is required' })
-	public role: UserRole
+	@IsString()
+	@IsNotEmpty()
+	taskId: string
+
+	@ApiProperty({
+		description: 'The ID of the user worker to this subtask',
+		example: '123e4567-e89b-12d3-a456-426614174000'
+	})
+	@IsString()
+	@IsNotEmpty()
+	workerId: string
 }

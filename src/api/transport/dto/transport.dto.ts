@@ -38,10 +38,4 @@ export class TransportResponse {
 		description: 'Transport creation time'
 	})
 	public createdAt: Date
-
-	@ApiProperty({
-		example: '2025-10-28T17:30:00.000Z',
-		description: 'Transport update time'
-	})
-	public updatedAt: Date
 }

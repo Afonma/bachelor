@@ -40,21 +40,13 @@ export class TransportService {
 					id: true,
 					name: true,
 					image: true,
-					status: true
-				},
-				include: {
+					status: true,
+					createdAt: true,
 					manufacturer: {
 						select: {
 							id: true,
 							slug: true,
 							name: true
-						}
-					},
-					tasks: {
-						select: {
-							id: true,
-							name: true,
-							description: true
 						}
 					}
 				}
