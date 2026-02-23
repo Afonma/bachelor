@@ -19,7 +19,6 @@ export class TransportService {
 			data: {
 				name: dto.name,
 				image: dto.image,
-				status: dto.status,
 				manufacturer: {
 					connect: {
 						id: dto.manufacturerId

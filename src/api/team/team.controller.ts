@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Protected, Roles } from '@/shared/decorators'
+
 import { PatchTeamRequest, TeamResponse } from './dto'
 import { CreateTeamRequest } from './dto/create-team.dto'
 import { TeamService } from './team.service'
@@ -10,6 +12,8 @@ export class TeamController {
 	constructor(private readonly teamService: TeamService) {}
 
 	@Post('/')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({ summary: 'Create a new team' })
 	@ApiResponse({
@@ -58,6 +62,8 @@ export class TeamController {
 	}
 
 	@Patch('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: 'Update team by id' })
 	@ApiResponse({
@@ -78,6 +84,8 @@ export class TeamController {
 	}
 
 	@Delete('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({ summary: 'Delete team by id' })
 	@ApiResponse({

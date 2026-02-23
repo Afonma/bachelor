@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Protected, Roles } from '@/shared/decorators'
 import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { CreateManufacturerRequest } from './dto/create-manufacturer.dto'
@@ -13,6 +14,8 @@ export class ManufacturerController {
 	constructor(private readonly manufacturerService: ManufacturerService) {}
 
 	@Post('/')
+	@Roles('ADMIN')
+	@Protected()
 	@ApiOperation({
 		summary: 'Create a manufacturer'
 	})
@@ -31,6 +34,8 @@ export class ManufacturerController {
 	}
 
 	@Get('/')
+	@Roles('ADMIN')
+	@Protected()
 	@ApiOperation({
 		summary: 'Get all manufacturers'
 	})
@@ -49,6 +54,8 @@ export class ManufacturerController {
 	}
 
 	@Get('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@ApiOperation({
 		summary: 'Find manufacturer by id'
 	})
@@ -71,8 +78,10 @@ export class ManufacturerController {
 	}
 
 	@Patch('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@ApiOperation({
-		summary: 'Update task by id'
+		summary: 'Update manufacturer by id'
 	})
 	@HttpCode(HttpStatus.OK)
 	@ApiResponse({
@@ -93,6 +102,8 @@ export class ManufacturerController {
 	}
 
 	@Delete('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@ApiOperation({
 		summary: 'Delete manufacturer by id'
 	})

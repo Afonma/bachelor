@@ -3,7 +3,7 @@ import { FilesInterceptor } from '@nestjs/platform-express'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { CloudinaryService } from '@/libs/cloudinary/cloudinary.service'
-import { ApiFileUpload } from '@/shared/decorators'
+import { ApiFileUpload, Protected, Roles } from '@/shared/decorators'
 
 import { UploadService } from './upload.service'
 
@@ -19,6 +19,8 @@ export class UploadController {
 		status: HttpStatus.CREATED,
 		description: 'File successfully upload.'
 	})
+	@Roles('ADMIN')
+	@Protected()
 	@UseInterceptors(FilesInterceptor('files'))
 	@ApiFileUpload()
 	@Post('/')

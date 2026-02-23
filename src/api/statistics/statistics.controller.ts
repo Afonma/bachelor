@@ -1,6 +1,8 @@
 import { Controller, Get, HttpCode, HttpStatus } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Protected, Roles } from '@/shared/decorators'
+
 import { StatisticsResponse } from './dto'
 import { StatisticsService } from './statistics.service'
 
@@ -20,6 +22,8 @@ export class StatisticsController {
 		status: HttpStatus.BAD_REQUEST,
 		description: 'Invalid data'
 	})
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@Get()
 	public getStatitics() {

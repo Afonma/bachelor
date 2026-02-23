@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Protected, Roles } from '@/shared/decorators'
 import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { CreateTaskRequest, PatchTaskRequest, TaskResponse } from './dto'
@@ -11,6 +12,8 @@ export class TaskController {
 	constructor(private readonly taskService: TaskService) {}
 
 	@Post('/')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
 		summary: 'Create a new task'
@@ -47,6 +50,7 @@ export class TaskController {
 	}
 
 	@Get('/:id')
+	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		summary: 'Get task by its id'
@@ -65,6 +69,8 @@ export class TaskController {
 	}
 
 	@Patch('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		summary: 'Update the task by its id'
@@ -87,6 +93,8 @@ export class TaskController {
 	}
 
 	@Delete('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.NO_CONTENT)
 	@ApiOperation({
 		summary: 'Delete the task by'

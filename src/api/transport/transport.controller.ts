@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
+import { Protected, Roles } from '@/shared/decorators'
 import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { CreateTransportRequest, PatchTransportRequest, TransportResponse } from './dto'
@@ -11,6 +12,8 @@ export class TransportController {
 	constructor(private readonly transportService: TransportService) {}
 
 	@Post('/')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
 		summary: 'Create a transport'
@@ -69,6 +72,8 @@ export class TransportController {
 	}
 
 	@Patch('/:id')
+	@Roles('ADMIN')
+	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		summary: 'Update transport by id'
