@@ -11,7 +11,7 @@ export class TransportController {
 	constructor(private readonly transportService: TransportService) {}
 
 	@Post('/')
-	@HttpCode(HttpStatus.CREATED) //succesful request 201
+	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({
 		summary: 'Create a transport'
 	})
