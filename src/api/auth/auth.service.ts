@@ -13,20 +13,22 @@ import { JwtPayload } from './interfaces'
 
 @Injectable()
 export class AuthService {
-	private readonly JWT_ACCESS_TOKEN_TTL: StringValue
-	private readonly JWT_REFRESH_TOKEN_TTL: StringValue
+	private readonly JWT_ACCESS_TOKEN_TTL_STR: StringValue
+	private readonly JWT_REFRESH_TOKEN_TTL_STR: StringValue
+
 	public constructor(
 		private readonly jwtService: JwtService,
 		private readonly configService: ConfigService,
 		private readonly prismaService: PrismaService,
 		private readonly redisService: RedisService
 	) {
-		this.JWT_ACCESS_TOKEN_TTL = this.configService.getOrThrow<StringValue>('JWT_ACCESS_TOKEN_TTL')
-		this.JWT_REFRESH_TOKEN_TTL = this.configService.getOrThrow<StringValue>('JWT_REFRESH_TOKEN_TTL')
+		this.JWT_ACCESS_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_ACCESS_TOKEN_TTL_STR')
+		this.JWT_REFRESH_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_REFRESH_TOKEN_TTL_STR')
 	}
 
 	public async login(dto: LoginRequest) {
 		const { email, password } = dto
+
 		const admin = await this.prismaService.user.findFirst({
 			where: {
 				email,
@@ -43,6 +45,7 @@ export class AuthService {
 				email
 			}
 		})
+
 		if (!user) throw new NotFoundException('Login is invalid')
 
 		const isValidPassword = await verify(user.password, password)
@@ -57,8 +60,8 @@ export class AuthService {
 	}
 
 	public async logout(refreshToken: string, accessToken: string) {
-		await this.redisService.setTokenToBlackList(accessToken, this.configService.getOrThrow<number>('JWT_ACCESS_TOKEN_TTL'))
-		await this.redisService.setTokenToBlackList(refreshToken, this.configService.getOrThrow<number>('JWT_REFRESH_TOKEN_TTL'))
+		await this.redisService.setTokenToBlackList(accessToken, this.configService.getOrThrow<number>('JWT_ACCESS_TOKEN_TTL_SEC'))
+		await this.redisService.setTokenToBlackList(refreshToken, this.configService.getOrThrow<number>('JWT_REFRESH_TOKEN_TTL_SEC'))
 	}
 
 	public async refresh(user: User, refreshToken: string) {
@@ -68,7 +71,7 @@ export class AuthService {
 			id: user.id
 		}
 		const accessToken = await this.jwtService.signAsync(payload, {
-			expiresIn: this.JWT_ACCESS_TOKEN_TTL
+			expiresIn: this.JWT_ACCESS_TOKEN_TTL_STR
 		})
 		return { accessToken }
 	}
@@ -78,11 +81,11 @@ export class AuthService {
 			id: user.id
 		}
 		const accessToken = await this.jwtService.signAsync(payload, {
-			expiresIn: this.JWT_ACCESS_TOKEN_TTL
+			expiresIn: this.JWT_ACCESS_TOKEN_TTL_STR
 		})
 
 		const refreshToken = await this.jwtService.signAsync(payload, {
-			expiresIn: this.JWT_REFRESH_TOKEN_TTL
+			expiresIn: this.JWT_REFRESH_TOKEN_TTL_STR
 		})
 		return {
 			accessToken,
