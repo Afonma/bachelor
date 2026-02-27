@@ -1,10 +1,11 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
-import { ApiOperation, ApiResponse } from '@nestjs/swagger'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
+import { ApiOkResponse, ApiOperation, ApiResponse } from '@nestjs/swagger'
 import type { User } from '@prisma/client'
 
 import { Authorized, Protected, Roles } from '@/shared/decorators'
+import { QueryPaginationRequest } from '@/shared/dtos'
 
-import { CreateUserRequest, PatchUserRequest, UserResponse } from './dto'
+import { CreateUserRequest, PatchUserRequest, UserResponse, UsersResponse } from './dto'
 import { UsersService } from './users.service'
 
 @Controller('users')
@@ -29,6 +30,19 @@ export class UsersController {
 		return this.usersService.create(dto)
 	}
 
+	@Get('/')
+	@Roles('ADMIN')
+	@Protected()
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({ summary: 'Get all users' })
+	@ApiOkResponse({
+		description: 'List of users',
+		type: UsersResponse
+	})
+	public async getAll(@Query() query: QueryPaginationRequest) {
+		return this.usersService.getAll(query)
+	}
+
 	@Get('/@me')
 	@Protected()
 	@HttpCode(HttpStatus.OK)
@@ -46,8 +60,20 @@ export class UsersController {
 		return this.usersService.getById(user.id)
 	}
 
-	@Patch('/@me')
-	@Protected()
+	@Get('/:id')
+	@Roles('ADMIN')
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({ summary: 'Get user by ID' })
+	@ApiOkResponse({
+		description: 'User information',
+		type: UserResponse
+	})
+	public async getById(@Param('id') id: string) {
+		return this.usersService.getById(id)
+	}
+
+	@Patch('/:id')
+	@Roles('ADMIN')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: 'Update the currently authenticated user' })
 	@ApiResponse({
@@ -63,8 +89,8 @@ export class UsersController {
 		status: HttpStatus.NOT_FOUND,
 		description: 'User not found'
 	})
-	public async updateMe(@Authorized() user: User, @Body() dto: PatchUserRequest) {
-		return this.usersService.patchUser(user.id, dto)
+	public async patchUser(@Param('id') id: string, @Body() dto: PatchUserRequest) {
+		return this.usersService.patchUser(id, dto)
 	}
 
 	@Delete('/:id')

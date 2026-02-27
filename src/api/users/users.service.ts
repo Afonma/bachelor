@@ -3,6 +3,9 @@ import { ChatType } from '@prisma/client'
 import { hash } from 'argon2'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
+import { QueryPaginationRequest } from '@/shared/dtos/query-pagination.dto'
+import { pagination } from '@/shared/utils/pagination'
+
 import { CreateUserRequest, PatchUserRequest } from './dto'
 
 @Injectable()
@@ -62,6 +65,44 @@ export class UsersService {
 		return user
 	}
 
+	public async getAll(query: QueryPaginationRequest) {
+		const { prismaQuery, page, limit } = pagination(query, {
+			searchFields: ['email']
+		})
+
+		const [items, total] = await Promise.all([
+			this.prismaService.user.findMany({
+				...prismaQuery,
+				select: {
+					id: true,
+					firstname: true,
+					lastname: true,
+					email: true,
+					phone: true,
+					role: true,
+					createdAt: true
+				}
+			}),
+			this.prismaService.user.count({
+				where: prismaQuery.where
+			})
+		])
+
+		const totalPages = Math.ceil(total / limit)
+
+		return {
+			items,
+			meta: {
+				total,
+				page: Number(query.page) || 1,
+				limit: Number(query.limit) || 20,
+				totalPages,
+				nextPage: page < totalPages ? page + 1 : null,
+				prevPage: page > 1 ? page - 1 : null
+			}
+		}
+	}
+
 	public async getById(id: string) {
 		const user = await this.prismaService.user.findUnique({
 			where: {
@@ -83,6 +124,7 @@ export class UsersService {
 
 		return user
 	}
+
 	public async patchUser(id: string, dto: PatchUserRequest) {
 		const { firstname, lastname, phone } = dto
 
@@ -108,6 +150,7 @@ export class UsersService {
 			}
 		})
 	}
+
 	public async remove(id: string) {
 		await this.prismaService.user.delete({
 			where: {

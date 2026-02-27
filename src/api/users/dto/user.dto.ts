@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { UserRole } from '@prisma/client'
 
+import { QueryPaginationResponse } from '@/shared/dtos/query-pagination.dto'
+
 export class UserResponse {
 	@ApiProperty({
 		example: 'c1b92d83-26c4-4b71-8c25-4a9a2f6f0c6f',
@@ -52,4 +54,18 @@ export class UserResponse {
 		description: 'Date when the user was updated'
 	})
 	public updatedAt: Date
+}
+
+export class UsersResponse {
+	@ApiProperty({
+		type: [UserResponse],
+		description: 'List of users'
+	})
+	public items: UserResponse[]
+
+	@ApiProperty({
+		type: QueryPaginationResponse,
+		description: 'Pagination metadata'
+	})
+	public meta: QueryPaginationResponse
 }

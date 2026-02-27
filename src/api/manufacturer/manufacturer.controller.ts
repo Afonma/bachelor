@@ -9,7 +9,7 @@ import { ManufacturerResponse } from './dto/manufacturer.dto'
 import { PatchManufacturerRequest } from './dto/patch-manufacturer.dto'
 import { ManufacturerService } from './manufacturer.service'
 
-@Controller('manufacturer')
+@Controller('manufacturers')
 export class ManufacturerController {
 	constructor(private readonly manufacturerService: ManufacturerService) {}
 
@@ -55,7 +55,6 @@ export class ManufacturerController {
 
 	@Get('/:id')
 	@Roles('ADMIN')
-	@Protected()
 	@ApiOperation({
 		summary: 'Find manufacturer by id'
 	})
@@ -79,7 +78,6 @@ export class ManufacturerController {
 
 	@Patch('/:id')
 	@Roles('ADMIN')
-	@Protected()
 	@ApiOperation({
 		summary: 'Update manufacturer by id'
 	})

@@ -93,6 +93,7 @@ export class TransportService {
 	}
 
 	public async patchTransport(id: string, dto: PatchTransportRequest) {
+		console.log(dto)
 		return await this.prismaService.transport.update({
 			where: {
 				id
@@ -117,7 +118,6 @@ export class TransportService {
 		})
 
 		const match = /\/upload\/(?:v\d+\/)?([^/.]+)\.[a-z]+$/i.exec(trans?.image)
-
 		await this.cloudinaryService.destroy(match[1])
 
 		return await this.prismaService.transport.delete({

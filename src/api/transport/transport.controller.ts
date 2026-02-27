@@ -7,7 +7,7 @@ import { QueryPaginationRequest } from '@/shared/dtos'
 import { CreateTransportRequest, PatchTransportRequest, TransportResponse } from './dto'
 import { TransportService } from './transport.service'
 
-@Controller('transport')
+@Controller('transports')
 export class TransportController {
 	constructor(private readonly transportService: TransportService) {}
 
@@ -50,6 +50,7 @@ export class TransportController {
 	}
 
 	@Get('/:id')
+	@Roles('ADMIN')
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		summary: 'Get transport by id'
@@ -73,7 +74,6 @@ export class TransportController {
 
 	@Patch('/:id')
 	@Roles('ADMIN')
-	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({
 		summary: 'Update transport by id'

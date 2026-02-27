@@ -1,6 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common'
 import { PrismaService } from 'src/infra/prisma/prisma.service'
 
+import { QueryPaginationRequest } from '@/shared/dtos'
+import { pagination } from '@/shared/utils'
+
 import { CreateTeamRequest, PatchTeamRequest } from './dto'
 
 @Injectable()
@@ -15,22 +18,49 @@ export class TeamService {
 		})
 	}
 
-	public async getAll() {
-		return await this.prismaService.team.findMany({
-			include: {
-				users: {
-					select: {
-						id: true,
-						lastname: true,
-						firstname: true,
-						phone: true,
-						role: true,
-						email: true,
-						createdAt: true
+	public async getAll(query: QueryPaginationRequest) {
+		const { prismaQuery, page, limit } = pagination(query, {
+			searchFields: ['name']
+		})
+
+		const [items, total] = await Promise.all([
+			this.prismaService.team.findMany({
+				...prismaQuery,
+				select: {
+					id: true,
+					name: true,
+					createdAt: true,
+					users: {
+						select: {
+							id: true,
+							lastname: true,
+							firstname: true,
+							phone: true,
+							role: true,
+							email: true,
+							createdAt: true
+						}
 					}
 				}
+			}),
+			this.prismaService.transport.count({
+				where: prismaQuery.where
+			})
+		])
+
+		const totalPages = Math.ceil(total / limit)
+
+		return {
+			items,
+			meta: {
+				total,
+				page: Number(query.page) || 1,
+				limit: Number(query.limit) || 20,
+				totalPages,
+				nextPage: page < totalPages ? page + 1 : null,
+				prevPage: page > 1 ? page - 1 : null
 			}
-		})
+		}
 	}
 
 	public async getById(id: string) {

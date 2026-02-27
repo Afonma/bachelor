@@ -1,7 +1,8 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post } from '@nestjs/common'
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Query } from '@nestjs/common'
 import { ApiOperation, ApiResponse } from '@nestjs/swagger'
 
 import { Protected, Roles } from '@/shared/decorators'
+import { QueryPaginationRequest } from '@/shared/dtos'
 
 import { PatchTeamRequest, TeamResponse } from './dto'
 import { CreateTeamRequest } from './dto/create-team.dto'
@@ -41,8 +42,8 @@ export class TeamController {
 		status: HttpStatus.BAD_REQUEST,
 		description: 'Ivalid team data'
 	})
-	public async getAll() {
-		return this.teamService.getAll()
+	public async getAll(@Query() query: QueryPaginationRequest) {
+		return this.teamService.getAll(query)
 	}
 
 	@Get('/:id')
