@@ -13,8 +13,8 @@ export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
 	@Post('/')
-	@Roles('ADMIN')
-	@Protected()
+	// @Roles('ADMIN')
+	// @Protected()
 	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({ summary: 'Create a new user' })
 	@ApiResponse({
@@ -31,7 +31,6 @@ export class UsersController {
 	}
 
 	@Get('/')
-	@Roles('ADMIN')
 	@Protected()
 	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: 'Get all users' })

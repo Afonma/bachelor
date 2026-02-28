@@ -6,6 +6,7 @@ import { getJwtConfig } from '@/config'
 import { PrismaModule } from '@/infra/prisma/prisma.module'
 import { RedisModule } from '@/infra/redis/redis.module'
 
+import { ChatController } from './chat.controller'
 import { ChatGateway } from './chat.gateway'
 import { ChatService } from './chat.service'
 
@@ -20,6 +21,7 @@ import { ChatService } from './chat.service'
 		RedisModule,
 		PrismaModule
 	],
+	controllers: [ChatController],
 	providers: [ChatGateway, ChatService]
 })
 export class ChatModule {}

@@ -8,7 +8,7 @@ import { PrismaService } from '@/infra/prisma/prisma.service'
 export function wsJwtMiddleware(jwtService: JwtService, prismaService: PrismaService, configService: ConfigService) {
 	return async function (client: Socket, next: (err?: any) => void) {
 		try {
-			const auth = client.handshake.headers.authorization
+			const auth = client.handshake.auth.token
 			if (!auth) return next(new Error('Unauthorized'))
 
 			const token = auth.replace('Bearer', '').trim()

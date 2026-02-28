@@ -1,6 +1,7 @@
 import { ConfigService } from '@nestjs/config'
 import { JwtService } from '@nestjs/jwt'
 import { ConnectedSocket, MessageBody, type OnGatewayConnection, type OnGatewayDisconnect, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets'
+import { ChatType } from '@prisma/client'
 import type { Server, Socket } from 'socket.io'
 
 import { PrismaService } from '@/infra/prisma/prisma.service'
@@ -9,7 +10,14 @@ import { wsJwtMiddleware } from '@/shared/middlewares'
 import { ChatService } from './chat.service'
 import { MessageRequest } from './dto'
 
-@WebSocketGateway({ namespace: 'chat' })
+@WebSocketGateway({
+	namespace: 'chat',
+	cors: {
+		origin: 'http://localhost:14701',
+		methods: ['GET', 'POST'],
+		credentials: true
+	}
+})
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 	@WebSocketServer()
 	public server: Server
@@ -39,6 +47,36 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
 		if (!user) return
 
 		await this.chatService.disconnected(user.id, client.id, this.server)
+	}
+
+	@SubscribeMessage('general:history')
+	public async getGeneralHistory(@ConnectedSocket() client: Socket) {
+		const general = await this.prismaService.chat.findFirst({
+			where: { type: ChatType.GENERAL },
+			include: {
+				messages: {
+					orderBy: { createdAt: 'asc' }
+				}
+			}
+		})
+
+		client.emit('general:history', general?.messages ?? [])
+	}
+
+	@SubscribeMessage('note:history')
+	public async getNoteHistory(@ConnectedSocket() client: Socket) {
+		const user = client.data.user
+
+		const general = await this.prismaService.chat.findFirst({
+			where: { ownerId: user.id, type: ChatType.NOTE },
+			include: {
+				messages: {
+					orderBy: { createdAt: 'asc' }
+				}
+			}
+		})
+
+		client.emit('note:history', general?.messages ?? [])
 	}
 
 	@SubscribeMessage('note')

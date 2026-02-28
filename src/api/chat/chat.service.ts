@@ -16,23 +16,32 @@ export class ChatService {
 	) {}
 
 	public async connected(userId: string, socketId: string, server: Server) {
-		const count = await this.redisService.scard(`user:sockets:${userId}`)
 		await this.redisService.sadd(`user:sockets:${userId}`, socketId)
 
-		if (count === 0) {
+		const count = await this.redisService.scard(`user:sockets:${userId}`)
+
+		if (count === 1) {
 			await this.redisService.sadd('users:online', userId)
 			server.emit('user:online', { userId })
 		}
+
+		const onlineCount = await this.redisService.scard('users:online')
+		server.emit('online:count', { count: onlineCount })
 	}
 
 	public async disconnected(userId: string, socketId: string, server: Server) {
 		await this.redisService.srem(`user:sockets:${userId}`, socketId)
-		const isEmpty = await this.redisService.delIfEmpty(`user:sockets:${userId}`)
 
-		if (isEmpty) {
+		const count = await this.redisService.scard(`user:sockets:${userId}`)
+
+		if (count === 0) {
+			await this.redisService.del(`user:sockets:${userId}`)
 			await this.redisService.srem('users:online', userId)
 			server.emit('user:offline', { userId })
 		}
+
+		const onlineCount = await this.redisService.scard('users:online')
+		server.emit('online:count', { count: onlineCount })
 	}
 
 	public async online() {
