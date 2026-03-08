@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
-import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
+import { UserRole } from '@prisma/client'
+import { IsEmail, isEnum, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator'
 
 export class CreateUserRequest {
 	@ApiProperty({
@@ -42,6 +43,15 @@ export class CreateUserRequest {
 	@IsOptional()
 	@IsString({ message: 'Phone number must be a string' })
 	public phone?: string
+
+	@ApiProperty({
+		example: UserRole.ADMIN,
+		description: 'User role',
+		required: true,
+		enum: UserRole
+	})
+	@IsEnum(UserRole, { message: 'User role is required' })
+	public role: UserRole
 
 	@ApiProperty({
 		example: 'team-uuid-1234',
