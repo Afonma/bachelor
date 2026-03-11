@@ -22,8 +22,8 @@ export class AuthService {
 		private readonly prismaService: PrismaService,
 		private readonly redisService: RedisService
 	) {
-		this.JWT_ACCESS_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_ACCESS_TOKEN_TTL')
-		this.JWT_REFRESH_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_REFRESH_TOKEN_TTL')
+		this.JWT_ACCESS_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_ACCESS_TOKEN_TTL_STR')
+		this.JWT_REFRESH_TOKEN_TTL_STR = this.configService.getOrThrow<StringValue>('JWT_REFRESH_TOKEN_TTL_STR')
 	}
 
 	public async login(dto: LoginRequest) {
