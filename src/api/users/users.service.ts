@@ -42,15 +42,6 @@ export class UsersService {
 			where: { type: ChatType.GENERAL }
 		})
 
-		if (general) {
-			await this.prismaService.chatMember.create({
-				data: {
-					chatId: general.id,
-					userId: user.id
-				}
-			})
-		}
-
 		await this.prismaService.chat.create({
 			data: {
 				name: 'Saved Messages',
@@ -83,6 +74,7 @@ export class UsersService {
 
 		return user
 	}
+
 	public async patchUser(id: string, dto: PatchUserRequest) {
 		const { firstname, lastname, phone } = dto
 
@@ -107,10 +99,22 @@ export class UsersService {
 			}
 		})
 	}
-	public async remove(id: string) {
-		await this.prismaService.user.delete({
-			where: {
-				id
+
+	public async deactivate(id: string) {
+		return await this.prismaService.user.update({
+			where: { id },
+			data: {
+				isActive: false
+			},
+			select: {
+				id: true,
+				lastname: true,
+				firstname: true,
+				phone: true,
+				role: true,
+				email: true,
+				createdAt: true,
+				teamId: true
 			}
 		})
 	}

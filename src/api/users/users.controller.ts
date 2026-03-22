@@ -69,16 +69,16 @@ export class UsersController {
 	@Protected()
 	@Roles('ADMIN')
 	@HttpCode(HttpStatus.NO_CONTENT)
-	@ApiOperation({ summary: 'Delete user by ID' })
+	@ApiOperation({ summary: 'Deactivate user by ID' })
 	@ApiResponse({
 		status: HttpStatus.NO_CONTENT,
-		description: 'User successfully deleted'
+		description: 'User successfully deactivate'
 	})
 	@ApiResponse({
 		status: HttpStatus.NOT_FOUND,
 		description: 'User not found'
 	})
-	public async remove(@Param('id') id: string) {
-		return this.usersService.remove(id)
+	public async deactivate(@Param('id') id: string) {
+		return this.usersService.deactivate(id)
 	}
 }
