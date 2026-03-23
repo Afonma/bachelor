@@ -78,7 +78,7 @@ export class UsersService {
 	public async patchUser(id: string, dto: PatchUserRequest) {
 		const { firstname, lastname, phone } = dto
 
-		return await this.prismaService.user.update({
+		return this.prismaService.user.update({
 			where: {
 				id
 			},
@@ -86,35 +86,15 @@ export class UsersService {
 				firstname,
 				lastname,
 				phone
-			},
-			select: {
-				id: true,
-				lastname: true,
-				firstname: true,
-				phone: true,
-				role: true,
-				email: true,
-				createdAt: true,
-				team: true
 			}
 		})
 	}
 
 	public async deactivate(id: string) {
-		return await this.prismaService.user.update({
+		return this.prismaService.user.update({
 			where: { id },
 			data: {
 				isActive: false
-			},
-			select: {
-				id: true,
-				lastname: true,
-				firstname: true,
-				phone: true,
-				role: true,
-				email: true,
-				createdAt: true,
-				teamId: true
 			}
 		})
 	}
