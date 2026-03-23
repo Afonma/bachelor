@@ -21,6 +21,12 @@ export class TransportResponse {
 	public image: string
 
 	@ApiProperty({
+		example: '1991',
+		description: 'Transport year'
+	})
+	public year: string
+
+	@ApiProperty({
 		example: 'READY',
 		description: 'Transport status default(READY)',
 		enum: TransportStatus

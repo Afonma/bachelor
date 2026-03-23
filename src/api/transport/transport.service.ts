@@ -18,6 +18,7 @@ export class TransportService {
 				name: dto.name,
 				image: dto.image,
 				status: dto.status,
+				year: dto.year,
 				manufacturer: {
 					connect: {
 						id: dto.manufacturerId
@@ -76,6 +77,7 @@ export class TransportService {
 			select: {
 				name: true,
 				image: true,
+				year: true,
 				status: true,
 				manufacturerId: true
 			}

@@ -39,6 +39,8 @@ model Transport {
   name  String
   image String
 
+  year String
+
   status TransportStatus @default(READY)
 
   manufacturer   Manufacturer @relation(fields: [manufacturerId], references: [id])

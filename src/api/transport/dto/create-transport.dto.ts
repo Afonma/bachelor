@@ -30,6 +30,19 @@ export class CreateTransportRequest {
 	image: string
 
 	@ApiProperty({
+		example: '1991',
+		description: 'Transport year',
+		required: true
+	})
+	@IsString({
+		message: 'Transport year must be string'
+	})
+	@IsNotEmpty({
+		message: 'Transport year is required'
+	})
+	year: string
+
+	@ApiProperty({
 		example: 'READY',
 		description: 'Car status default(READY)',
 		enum: TransportStatus

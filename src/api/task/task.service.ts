@@ -44,6 +44,7 @@ export class TaskService {
 				transport: {
 					select: {
 						id: true,
+						year: true,
 						name: true,
 						image: true,
 						status: true,
@@ -88,6 +89,7 @@ export class TaskService {
 				transport: {
 					select: {
 						id: true,
+						year: true,
 						name: true,
 						image: true,
 						status: true,
